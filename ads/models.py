@@ -9,8 +9,8 @@ class Ads(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     image_url = models.CharField(max_length=200)  # ссылка на Амазон bucket, если я правильно понял
-    category = models.CharField(max_length=100)  # либо можно создать другую модель и соединить с
-    # помощью ForeignKey
+    category = models.CharField(max_length=100)
+    # либо можно создать другую модель и соединить с помощью ForeignKey
     condition = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -21,9 +21,8 @@ class Ads(models.Model):
 class ExchangeProposal(models.Model):
     id = models.AutoField(primary_key=True)
     ad_sender = models.ForeignKey(Ads, on_delete=models.CASCADE, related_name='ad_sender')
-    ad_receiver = models.ForeignKey(Ads, on_delete=models.CASCADE,related_name='ad_receiver')
+    ad_receiver = models.ForeignKey(Ads, on_delete=models.CASCADE, related_name='ad_receiver')
     comment = models.TextField()
-    status_choices = [("wait","Ожидает"), ("accept","Принята"),("reject","Отклонена")]
+    status_choices = [("wait", "Ожидает"), ("accept", "Принята"), ("reject", "Отклонена")]
     status = models.CharField(max_length=10, choices=status_choices, default="wait")
     created_at = models.DateTimeField(auto_now_add=True)
-
