@@ -8,7 +8,8 @@ class Ads(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    image_url = models.CharField(max_length=200)  # ссылка на Амазон bucket, если я правильно понял
+    # ссылка на Амазон bucket, если я правильно понял
+    image_url = models.CharField(max_length=200, null=True, blank=True)
     category = models.CharField(max_length=100)
     # либо можно создать другую модель и соединить с помощью ForeignKey
     condition = models.CharField(max_length=100)

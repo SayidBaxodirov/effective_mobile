@@ -6,6 +6,7 @@ class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ads
         fields = '__all__'
+        read_only_fields = ['user']
 
     def validate_title(self, value):
         if len(value.strip()) < 3:
@@ -22,3 +23,7 @@ class ProposalSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExchangeProposal
         fields = '__all__'
+
+    def validate_comment(self, value):
+        if len(value.strip()) < 5:
+            raise serializers.ValidationError('Comment should be at least 5 characters long.')
