@@ -21,9 +21,13 @@ class Ads(models.Model):
 
 class ExchangeProposal(models.Model):
     id = models.AutoField(primary_key=True)
+    # не нужно ли напрямую добавить и самого user foreign key?
     ad_sender = models.ForeignKey(Ads, on_delete=models.CASCADE, related_name='ad_sender')
     ad_receiver = models.ForeignKey(Ads, on_delete=models.CASCADE, related_name='ad_receiver')
     comment = models.TextField()
     status_choices = [("wait", "Ожидает"), ("accept", "Принята"), ("reject", "Отклонена")]
     status = models.CharField(max_length=10, choices=status_choices, default="wait")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.ad_sender} : {self.ad_receiver}"
