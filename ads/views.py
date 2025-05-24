@@ -9,6 +9,14 @@ from .models import Ads, ExchangeProposal
 from .serializers import AdSerializer, ProposalSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 
 # Create your views here.
@@ -30,5 +38,4 @@ class AdViewSet(viewsets.ModelViewSet):
         return obj
 
     def perform_create(self, serializer):
-        print("Authenticated user:", self.request.user)
         serializer.save(user=self.request.user)

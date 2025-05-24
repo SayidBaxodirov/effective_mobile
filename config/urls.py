@@ -22,42 +22,44 @@ from rest_framework import permissions
 from drf_yasg.generators import OpenAPISchemaGenerator
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
-# class JWTSchemaGenerator(OpenAPISchemaGenerator):
-#     def get_security_definitions(self):
-#         security_definitions = super().get_security_definitions()
-#         security_definitions['Bearer'] = {
-#             'type': 'apiKey',
-#             'name': 'Authorization',
-#             'in': 'header',
-#         }
-#         return security_definitions
+class JWTSchemaGenerator(OpenAPISchemaGenerator):
+    def get_security_definitions(self):
+        security_definitions = super().get_security_definitions()
+        security_definitions['Bearer'] = {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+        return security_definitions
 
 
 schema_view = get_schema_view(
     openapi.Info(
         title='Effective Mobile task',
         default_version='v1',
-        description='Effective Mobile Python task api documentation',
+        description='Effective Mobile Python task\'s api documentation',
         terms_of_service='',
         contact=openapi.Contact(email='smth@gmail.com'),
         license=openapi.License(name="Some license"),
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
-    # generator_class=JWTSchemaGenerator,
+    generator_class=JWTSchemaGenerator,
 
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),  # adds basic login/logout views
-    path('accounts/', include('django.contrib.auth.urls')),
-
+    #auth codes
+    path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
+    path("api-auth/", include("rest_framework.urls")),
+    #main urls
     path('api/', include('ads.urls')),
     # swagger codes
-    #auth not working
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
