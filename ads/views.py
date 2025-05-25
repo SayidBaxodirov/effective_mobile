@@ -23,7 +23,7 @@ def logout_view(request):
 
 # Create your views here.
 class AdViewSet(viewsets.ModelViewSet):
-    queryset = Ads.objects.all()
+    queryset = Ads.objects.all().order_by('-created_at','-id')
     serializer_class = AdSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     # filter and search logic
@@ -44,7 +44,7 @@ class AdViewSet(viewsets.ModelViewSet):
 
 
 class ExchangeProposalViewSet(viewsets.ModelViewSet):
-    queryset = ExchangeProposal.objects.all().select_related('ad_sender', "ad_receiver").order_by('-created_at')
+    queryset = ExchangeProposal.objects.all().select_related('ad_sender', "ad_receiver").order_by('-created_at', '-id')
     serializer_class = ProposalSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     # filter and search logic
